@@ -1,140 +1,167 @@
-# BrainDrive Plugin Development Template
+# Research Assistant Plugin
 
-This template serves as a starting point for [BrainDrive](https://github.com/BrainDriveAI/BrainDrive) plugin development, providing:
+A BrainDrive plugin that helps triage articles and resources for relevance to your active projects. Paste article text, select a project, and get AI-powered recommendations on whether to integrate findings now, save for later, or skip.
 
-- Comprehensive error handling patterns and utilities
-- Proper BrainDrive service integration
-- React component architecture with error boundaries
-- TypeScript type definitions and interfaces
-- Development tools and debugging utilities
-- Production-ready code structure and patterns
+## Features
 
-Use with the [Plugin Developer Quickstart Guide](https://docs.braindrive.ai/core/plugin-development/quickstart) to begin developing BrainDrive plugins in 30 minutes or less. 
+- **AI-Powered Analysis** - Analyzes articles against your project context using your configured LLM
+- **Smart Recommendations** - Get clear recommendations: Integrate Now, Save for Later, or Skip
+- **Key Insights Extraction** - Automatically extracts 3-5 key insights from each article
+- **One-Click Save** - Save relevant findings directly to your BrainDrive Library
+- **Follow-Up Chat** - Ask questions about the article with full context
+- **Theme Support** - Full light and dark mode support matching BrainDrive's design
 
-## Plugin Template Demo
+## Requirements
 
-![Plugin Template Demo](screenshot/PluginTemplateDemoPage.png)
+- [BrainDrive](https://github.com/BrainDriveAI/BrainDrive) installed locally
+- BrainDrive-Library set up at `~/BrainDrive-Library`
+- At least one AI model configured in BrainDrive
 
-## What's Included
+## Installation
 
-### Core Components
+### Option 1: Build from Source
 
-1. **Main Plugin Component** (`PluginTemplate.tsx`) - Enhanced with comprehensive error handling
-2. **Error Boundary** (`ErrorBoundary.tsx`) - React error boundary with recovery mechanisms
-3. **Error Display** (`ErrorDisplay.tsx`) - User-friendly error display with actions
-4. **Loading Spinner** (`LoadingSpinner.tsx`) - Consistent loading state component
-5. **Settings Example** (`SettingsExample.tsx`) - Template for plugin configuration
-
-### Error Handling System
-- **Custom Error Types** - Specific error classes for different scenarios
-- **Error Handler Utility** - Centralized error management with multiple strategies
-- **Service Integration** - Error-safe service initialization and usage
-- **User Experience** - Clear error messages and recovery options
-
-### Development Tools
-- **TypeScript Definitions** - Complete type safety for BrainDrive APIs
-- **Utility Functions** - Enhanced utilities with error handling
-- **Documentation** - Comprehensive guides and examples
-- **Testing Patterns** - Error handling test examples
-
-## Getting Started
-
-### Prerequisites
-
-- [BrainDrive](https://github.com/BrainDriveAI/BrainDrive) Platform
-- Node.js 16+ and npm/yarn
-- BrainDrive development environment
-- Basic knowledge of React and TypeScript
-
-### Setup
-1. **Copy the template** to your new plugin directory
-2. **Customize the plugin metadata**:
+1. Clone this repository:
    ```bash
-   # Update package.json with your plugin details
-   # Update lifecycle_manager.py with your plugin information and module definitions
+   git clone https://github.com/davewaring/ResearchAssistant-Plugin.git
+   cd ResearchAssistant-Plugin
    ```
-3. **Install dependencies**:
+
+2. Install dependencies:
    ```bash
    npm install
    ```
-4. **Build the plugin**:
+
+3. Build the plugin:
    ```bash
    npm run build
    ```
 
-### Customization Checklist
-- [ ] Update `package.json` name, description, and version
-- [ ] Customize `lifecycle_manager.py` plugin and module data ([see guide](references/LIFECYCLE_MANAGER_CUSTOMIZATION_GUIDE.md))
-- [ ] Replace template components with your functionality
-- [ ] Update error types and handling for your use cases ([see guide](https://github.com/BrainDriveAI/PluginTemplate/blob/main/DEVELOPER_GUIDE.md))
-- [ ] Add your specific service integrations ([see examples](https://docs.braindrive.ai/services/intro)
-- [ ] Write tests for your plugin functionality
+   This automatically outputs to your BrainDrive plugins folder (`~/BrainDrive/plugins/research-assistant/`).
 
-Need help? Check our [comprehensive documentation](https://docs.braindrive.ai) or visit [community.braindrive.ai](https://community.braindrive.ai/)
+4. Restart BrainDrive or refresh the plugins list.
 
-## Plugin Structure
+### Option 2: Copy Pre-built Plugin
+
+Copy the `dist/` folder contents to `~/BrainDrive/plugins/research-assistant/`.
+
+## Usage
+
+### Basic Workflow
+
+1. **Open the Plugin** - Find "Research Assistant" in your BrainDrive plugin panel
+
+2. **Paste Article Content** - Copy the text from any article, blog post, or documentation and paste it into the text area
+
+3. **Select a Project** - Choose which project to evaluate the article against from the dropdown
+
+4. **Choose an AI Model** - Select which configured model to use for analysis
+
+5. **Click Analyze** - The AI will analyze the article and provide:
+   - A recommendation (Integrate Now / Save for Later / Skip)
+   - Key insights extracted from the article
+   - An explanation of why it's relevant or not
+
+6. **Take Action**:
+   - **Integrate Now** - Saves insights to `research-findings.md` in your project folder
+   - **Save for Future** - Saves to `ideas.md` for later consideration
+   - **Dismiss** - Clears the analysis and resets for a new article
+
+7. **Ask Follow-Up Questions** - Use the chat interface to ask questions about the article
+
+### Tips
+
+- For best results, include the full article text rather than just excerpts
+- The AI uses your project's `spec.md`, `build-plan.md`, and other context files to understand relevance
+- Very long articles (50,000+ characters) may be truncated to fit LLM context limits
+- "Thinking" models (like qwen3) work well but may take longer to respond
+
+## Project Structure
+
 ```
-src/
-├── components/           # React components
-│   ├── ErrorBoundary.tsx    # Error boundary component
-│   ├── ErrorDisplay.tsx     # Error display component
-│   └── index.ts             # Component exports
-├── services/            # Business logic services
-│   └── PluginService.ts     # Main service with error handling
-├── utils/              # Utility functions
-│   ├── errorHandling.ts     # Error handling utilities
-│   └── utils.ts             # General utilities
-├── types.ts            # TypeScript definitions
-└── PluginTemplate.tsx  # Main plugin component
+ResearchAssistant-Plugin/
+├── src/
+│   ├── ResearchAssistant.tsx    # Main React component
+│   ├── ResearchAssistant.css    # Styles (light/dark theme)
+│   └── types.ts                 # TypeScript interfaces
+├── webpack.config.js            # Build configuration
+├── package.json                 # Dependencies and scripts
+└── README.md                    # This file
 ```
 
-## Learning Resources
+## Development
 
-### Documentation
-- **[Developer Guide](DEVELOPER_GUIDE.md)** - Comprehensive implementation guide
-- **[Error Handling Guide](ERROR_HANDLING_GUIDE.md)** - Detailed error handling reference
-- **[Lifecycle Manager Customization Guide](references/LIFECYCLE_MANAGER_CUSTOMIZATION_GUIDE.md)** - Complete guide for customizing lifecycle_manager.py
+### Build Commands
 
-### Lifecycle Manager References
-- **[Lifecycle Manager Reference](references/Lifecycle-Manager-Reference.md)** - Complete lifecycle manager architecture and function reference
-- **[Plugin Data Field Reference](references/Plugin-Data-Field-Reference.md)** - Detailed reference for all plugin_data fields
-- **[Module Data Field Reference](references/Module-Data-Field-Reference.md)** - Comprehensive guide to module_data configuration
+```bash
+# Production build
+npm run build
 
-### Additional Resources
-- **Inline Comments** - Extensive code documentation and TODOs
+# Development build with watch mode
+npm run dev
 
-## Troubleshooting
+# Clean build artifacts
+npm run clean
+```
 
-### Common Issues
-- **Build errors**: Check TypeScript types and imports
-- **Service integration**: Verify BrainDrive services are available
-- **Error handling**: Ensure error boundaries are properly configured
+### Customizing the Output Path
 
-### Debug Tips
-- Use the enhanced error display for debugging
-- Check browser console for detailed error logs
-- Use the error handler statistics for monitoring
-- Enable development mode for additional debugging info
+Edit `webpack.config.js` to change where the plugin builds to:
+
+```javascript
+output: {
+  path: path.resolve(os.homedir(), 'BrainDrive/plugins/research-assistant'),
+  // ...
+}
+```
+
+## How It Works
+
+1. **Project Loading** - Fetches active projects from `~/BrainDrive-Library/projects/active/`
+
+2. **Context Building** - Reads project files (spec.md, build-plan.md, decisions.md, research-findings.md) to understand what the project is about
+
+3. **LLM Analysis** - Sends the article text and project context to your configured AI model with a structured prompt
+
+4. **Recommendation** - Parses the AI response to extract recommendation, insights, and explanation
+
+5. **Saving** - Appends formatted findings to the appropriate Library file with timestamp and source context
+
+## Configuration
+
+No additional configuration required. The plugin uses:
+- Your BrainDrive's configured AI models
+- Your BrainDrive-Library for project context and saving
+- BrainDrive's authentication for API access
+
+## Roadmap
+
+### Current (v1.0)
+- [x] Text paste input
+- [x] Project selection
+- [x] AI analysis with recommendations
+- [x] Save to Library
+- [x] Follow-up chat
+- [x] Light/dark theme support
+
+### Future (v2)
+- [ ] PDF upload with text extraction
+- [ ] URL input with automatic content fetching
+- [ ] Multi-project tagging
+- [ ] Improved error handling
 
 ## Contributing
 
-When contributing to this template:
-1. Maintain backward compatibility
-2. Add comprehensive error handling to new features
-3. Update documentation for any changes
-4. Include tests for new functionality
-5. Follow the established code patterns
-
-## Full Project Documentation Index
-
-[BrainDrive Documentation](https://docs.braindrive.ai)
-
-## Questions?
-
-Post at [community.braindrive.ai](https://community.braindrive.ai). We're here to build the future of user-owned AI together. 
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
 ## License
 
-[MIT Licensed](LICENSE) - BrainDrive is built for your ownership & freedom. Your AI. Your Rules. 
+MIT License - See [LICENSE](LICENSE) for details.
 
+## Support
 
+- [BrainDrive Documentation](https://docs.braindrive.ai)
+- [Community Forum](https://community.braindrive.ai)

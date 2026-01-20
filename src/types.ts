@@ -81,20 +81,54 @@ export interface ResearchAssistantState {
   // Project selection
   selectedProject: string;
   projects: Project[];
+  // Model selection
+  models: ModelInfo[];
+  selectedModel: ModelInfo | null;
+  isLoadingModels: boolean;
   // Analysis results
   analysisResult: AnalysisResult | null;
   // Chat
   chatMessages: ChatMessage[];
   chatInput: string;
+  isChatLoading: boolean;
+  // Save status
+  saveSuccess: string;
+  isSaving: boolean;
 }
 
 export interface ResearchAssistantConfig {
   libraryPath?: string;
+  // AI Provider settings
+  aiProvider?: string;       // e.g., 'openrouter', 'ollama', 'openai'
+  aiSettingsId?: string;     // e.g., 'openrouter_settings'
+  aiServerId?: string;       // e.g., 'default'
+  aiModel?: string;          // e.g., 'anthropic/claude-3-haiku'
+}
+
+export interface ProjectContext {
+  project_slug: string;
+  agent_md: string;
+  spec_md: string;
+  build_plan_md: string;
+  research_findings_md: string;
+}
+
+export interface ModelInfo {
+  name: string;
+  provider: string;
+  providerId: string;
+  serverName: string;
+  serverId: string;
 }
 
 export interface Project {
   slug: string;
   name: string;
+  path?: string;
+  has_agent_md?: boolean;
+  has_spec_md?: boolean;
+  has_build_plan?: boolean;
+  status?: string;
 }
 
 export interface AnalysisResult {

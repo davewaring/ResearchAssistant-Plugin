@@ -100,7 +100,7 @@ class ResearchAssistantLifecycleManager(BaseLifecycleManager):
         self.plugin_data = {
             "name": "ResearchAssistant",
             "description": "Triage articles and resources against project context",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "type": "frontend",
             "icon": "FileSearch",
             "category": "productivity",

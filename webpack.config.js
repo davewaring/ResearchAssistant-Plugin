@@ -12,9 +12,10 @@ module.exports = {
   mode: "development",
   entry: "./src/index",
   output: {
-    // Build directly to BrainDrive plugin folder for rapid development
-    path: path.resolve(process.env.HOME, 'BrainDrive/backend/plugins/shared/ResearchAssistant/v1.0.0/dist'),
-    // path: path.resolve(__dirname, 'dist'), // Uncomment for standalone build
+    // Build to local dist/ for releases; override with BRAINDRIVE_DEV_OUTPUT for local dev
+    path: process.env.BRAINDRIVE_DEV_OUTPUT
+      ? path.resolve(process.env.BRAINDRIVE_DEV_OUTPUT)
+      : path.resolve(__dirname, 'dist'),
     publicPath: "auto",
     clean: true,
     library: {

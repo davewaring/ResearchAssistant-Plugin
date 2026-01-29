@@ -1,6 +1,6 @@
 {
   "name": "research-assistant",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "BrainDrive Research Assistant - Triage articles and resources against project context",
   "main": "dist/remoteEntry.js",
   "scripts": {

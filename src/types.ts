@@ -107,10 +107,10 @@ export interface ResearchAssistantConfig {
 
 export interface ProjectContext {
   project_slug: string;
-  agent_md: string;
-  spec_md: string;
-  build_plan_md: string;
-  research_findings_md: string;
+  agent_md: string | null;
+  spec_md: string | null;
+  build_plan_md: string | null;
+  research_findings_md: string | null;
 }
 
 export interface ModelInfo {

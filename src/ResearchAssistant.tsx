@@ -105,28 +105,29 @@ class ResearchAssistant extends React.Component<ResearchAssistantProps, Research
 
     try {
       // Call the Library API to get real projects
-      const response = await services.api.get('/api/v1/library/projects?category=active');
+      const response = await services.api.get('/api/v1/plugin-api/braindrive-library/library/projects?lifecycle=active');
 
       // Handle both direct array and wrapped response
-      const projects = Array.isArray(response) ? response : (response.data || []);
+      const rawProjects = Array.isArray(response) ? response : (response.projects || response.data || []);
 
-      if (projects.length === 0) {
+      if (rawProjects.length === 0) {
         this.setState({
           projects: [{ slug: '', name: '(No projects found in Library)' }]
         });
         return;
       }
 
-      // Map API response to Project interface
+      // Map backend response to Project interface
+      // Backend returns has_spec; frontend expects has_spec_md
       this.setState({
-        projects: projects.map((p: any) => ({
+        projects: rawProjects.map((p: any) => ({
           slug: p.slug,
-          name: p.status ? `${p.name} (${p.status})` : p.name,
+          name: p.lifecycle ? `${p.name} (${p.lifecycle})` : p.name,
           path: p.path,
           has_agent_md: p.has_agent_md,
-          has_spec_md: p.has_spec_md,
+          has_spec_md: p.has_spec,
           has_build_plan: p.has_build_plan,
-          status: p.status
+          status: p.lifecycle
         }))
       });
     } catch (error) {
@@ -223,8 +224,19 @@ class ResearchAssistant extends React.Component<ResearchAssistantProps, Research
     if (!services.api || !projectSlug) return null;
 
     try {
-      const response = await services.api.get(`/api/v1/library/project/${projectSlug}/context`);
-      return response as ProjectContext;
+      const response = await services.api.get(
+        `/api/v1/plugin-api/braindrive-library/library/project/${projectSlug}/context?files=AGENT.md,spec.md,build-plan.md,research-findings.md`
+      );
+
+      // Map backend {files: {"AGENT.md": {content}}} to flat ProjectContext
+      const files = (response as any)?.files || {};
+      return {
+        project_slug: (response as any)?.project || projectSlug,
+        agent_md: files["AGENT.md"]?.content || null,
+        spec_md: files["spec.md"]?.content || null,
+        build_plan_md: files["build-plan.md"]?.content || null,
+        research_findings_md: files["research-findings.md"]?.content || null,
+      } as ProjectContext;
     } catch (error) {
       console.error('Failed to load project context:', error);
       return null;
@@ -464,7 +476,7 @@ Be concise but specific in your insights.`;
       const filename = action === 'integrate' ? 'research-findings.md' : 'ideas.md';
       const content = this.formatSaveContent(action);
 
-      const response = await services.api.post('/api/v1/library/append-file', {
+      const response = await services.api.post('/api/v1/plugin-api/braindrive-library/library/append-file', {
         project_slug: selectedProject,
         filename,
         content

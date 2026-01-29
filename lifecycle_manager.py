@@ -120,7 +120,8 @@ class ResearchAssistantLifecycleManager(BaseLifecycleManager):
             "update_available": False,
             "latest_version": None,
             "installation_type": "remote",
-            "permissions": ["storage.read", "storage.write", "api.access"]
+            "permissions": ["storage.read", "storage.write", "api.access"],
+            "backend_dependencies": ["braindrive-library"]
         }
         
         # Module data for Research Assistant
